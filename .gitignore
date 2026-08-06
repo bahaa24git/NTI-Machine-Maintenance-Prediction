@@ -2,6 +2,5 @@ factory.csv
 __pycache__/
 *.py[cod]
 .streamlit/secrets.toml
-models/*.joblib
 prediction_logs.csv
 .env
