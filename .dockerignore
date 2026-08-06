@@ -3,3 +3,4 @@ __pycache__
 *.pyc
 factory.ipynb
 prediction_logs.csv
+.env

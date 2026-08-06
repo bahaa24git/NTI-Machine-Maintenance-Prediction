@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import os
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -10,6 +11,10 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+from dotenv import load_dotenv
+
+load_dotenv()
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 from model_training import FAILURE_TARGET, ID_COLUMN, MODEL_NAMES, TARGET, get_feature_columns
 
