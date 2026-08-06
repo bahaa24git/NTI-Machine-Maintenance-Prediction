@@ -16,7 +16,15 @@ from dotenv import load_dotenv
 load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-from model_training import FAILURE_TARGET, ID_COLUMN, MODEL_NAMES, TARGET, get_feature_columns
+from model_training import (
+    FAILURE_TARGET,
+    ID_COLUMN,
+    MODEL_NAMES,
+    TARGET,
+    get_feature_columns,
+    train_artifact,
+    save_artifact,
+)
 
 
 DATA_PATH = Path(__file__).with_name("factory_sensor_simulator_2040.csv")
@@ -910,10 +918,15 @@ def main() -> None:
         st.stop()
 
     if not MODEL_PATH.exists():
-        st.error(
-            "Trained models were not found. Run `python train_models.py` once, then restart Streamlit."
-        )
-        st.stop()
+        st.info("Trained models not found — training in-app now (may take several minutes)…")
+        try:
+            with st.spinner("Training models — this may take several minutes."):
+                artifact = train_artifact(df)
+                save_artifact(artifact, MODEL_PATH)
+            st.success("Model training complete.")
+        except Exception as exc:
+            st.error(f"Training failed: {exc}")
+            st.stop()
     try:
         artifact = load_artifact(str(MODEL_PATH))
     except Exception as exc:
